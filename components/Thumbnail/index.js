@@ -1,13 +1,20 @@
+import Link from 'next/link';
 import ThumbnailStyles from './styles';
 
 const Thumbnail = ({
 	imageUrl = 'https://via.placeholder.com/210x295?text=?',
-	caption
+	caption,
+	href = '',
+	as = ''
 }) => {
 	return (
 		<div className="thumbnail">
-			<img src={imageUrl} className="thumbnail__image" />
-			<div className="thumbnail__caption">{caption}</div>
+			<Link href={href} as={as}>
+				<a>
+					<img src={imageUrl} className="thumbnail__image" />
+					<div className="thumbnail__caption">{caption}</div>
+				</a>
+			</Link>
 
 			<style jsx>{ThumbnailStyles}</style>
 		</div>

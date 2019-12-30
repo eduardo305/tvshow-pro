@@ -1,8 +1,7 @@
 import axios from 'axios';
 import Thumbnail from '../../components/Thumbnail';
-// import ThumbnailWithSass from '../../components/ThumbnailWithSass';
 
-const Home = ({ shows }) => {
+const Home = ({ shows, country }) => {
 	const renderShows = () => {
 		return shows.map((showItem, index) => {
 			const { show } = showItem;
@@ -12,6 +11,8 @@ const Home = ({ shows }) => {
 					<Thumbnail
 						imageUrl={(show.image && show.image.medium) || undefined}
 						caption={show.name}
+						href="/[country]/[showId]"
+						as={`/${country}/${show.id}`}
 					/>
 				</li>
 			);
@@ -26,7 +27,7 @@ const Home = ({ shows }) => {
 				.tvshows-grid {
 					display: grid;
 					grid-template-columns: 1fr 1fr;
-					gap: 20px;
+					gap: 10px;
 					padding: 0;
 					margin: 0;
 					list-style-type: none;
@@ -44,7 +45,8 @@ Home.getInitialProps = async context => {
 	);
 
 	return {
-		shows: response.data
+		shows: response.data,
+		country
 	};
 };
 
