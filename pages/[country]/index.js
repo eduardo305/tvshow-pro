@@ -20,20 +20,19 @@ const Home = ({ shows, country }) => {
 	};
 
 	return (
-		<ul className="tvshows-grid">
-			{renderShows()}
+		<div className="home">
+			<ul className="tvshows-grid">
+				{renderShows()}
 
-			<style jsx>{`
-				.tvshows-grid {
-					display: grid;
-					grid-template-columns: 1fr 1fr;
-					gap: 10px;
-					padding: 0;
-					margin: 0;
-					list-style-type: none;
-				}
-			`}</style>
-		</ul>
+				<style jsx>{`
+					.tvshows-grid {
+						display: grid;
+						grid-template-columns: 1fr 1fr;
+						gap: 10px;
+					}
+				`}</style>
+			</ul>
+		</div>
 	);
 };
 
