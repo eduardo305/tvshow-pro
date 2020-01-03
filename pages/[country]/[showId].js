@@ -2,6 +2,7 @@ import axios from 'axios';
 import parse from 'html-react-parser';
 import Cast from '../../components/Cast';
 import Error from 'next/error';
+import { withAuthorization } from '../../utils/withAuthorization';
 
 const ShowDetails = ({ show = {}, statusCode }) => {
 	const { name, image, summary, _embedded } = show;
@@ -48,4 +49,4 @@ ShowDetails.getInitialProps = async ({ query }) => {
 	}
 };
 
-export default ShowDetails;
+export default withAuthorization(ShowDetails);
