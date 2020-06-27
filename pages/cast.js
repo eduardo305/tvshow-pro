@@ -1,16 +1,18 @@
 import axios from 'axios';
 
-const CastMemberDetails = props => {
+const CastMemberDetails = (props) => {
 	return <img src={props.person.image.medium} />;
 };
 
-CastMemberDetails.getInitialProps = async ({ query }) => {
+export const getServerSideProps = async ({ query }) => {
 	const response = await axios.get(
 		`https://api.tvmaze.com/people/${query.personId}`
 	);
 
 	return {
-		person: response.data
+		props: {
+			person: response.data,
+		},
 	};
 };
 

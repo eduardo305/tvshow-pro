@@ -42,7 +42,7 @@ const Home = ({ shows, country, statusCode }) => {
 	);
 };
 
-Home.getInitialProps = async context => {
+export const getServerSideProps = async (context) => {
 	try {
 		const { defaultCountry } = cookies.get(context);
 		const country = context.query.country || defaultCountry || 'us';
@@ -52,12 +52,14 @@ Home.getInitialProps = async context => {
 		);
 
 		return {
-			shows: response.data,
-			country
+			props: {
+				shows: response.data,
+				country,
+			},
 		};
 	} catch (error) {
 		return {
-			statusCode: error.response ? error.response.status : 500
+			statusCode: error.response ? error.response.status : 500,
 		};
 	}
 };

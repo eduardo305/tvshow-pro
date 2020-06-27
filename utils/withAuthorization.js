@@ -1,14 +1,16 @@
-import { Component } from 'react';
 import cookies from 'nookies';
 import Router from 'next/router';
 
-const authenticate = context => {
+const authenticate = (context) => {
 	const { token } = cookies.get(context);
 
 	cookies.set(
 		context,
 		'plannedRoute',
-		JSON.stringify({ as: context.asPath, href: context.pathname }),
+		JSON.stringify({
+			as: context.asPath || `/${context.query.country}/${context.query.showId}`,
+			href: context.pathname || '/[country]/[showId]',
+		}),
 		{ path: '/' }
 	);
 
@@ -27,28 +29,31 @@ const authenticate = context => {
 	return token;
 };
 
-const isAuthenticated = context => {
+const isAuthenticated = (context) => {
 	const { token } = cookies.get(context);
 
 	return token;
 };
 
-const withAuthorization = WrappedComponent => {
-	return class extends Component {
-		static async getInitialProps(context) {
-			const token = authenticate(context);
-
-			const componentProps =
-				WrappedComponent.getInitialProps &&
-				(await WrappedComponent.getInitialProps(context));
-
-			return { ...componentProps, token };
-		}
-
-		render() {
-			return <WrappedComponent {...this.props} />;
-		}
+const withAuthorization = (WrappedComponent) => {
+	return (props) => {
+		return <WrappedComponent {...props.data} />;
 	};
 };
 
-export { withAuthorization, isAuthenticated };
+const withAuthServerSideProps = (getServerSidePropsFunc) => {
+	return async (context) => {
+		const token = authenticate(context);
+		const data = await getServerSidePropsFunc(context);
+
+		const resolve = {
+			props: {
+				data: data.props,
+			},
+		};
+
+		return token ? { props: { ...resolve.props, token } } : resolve;
+	};
+};
+
+export { withAuthorization, isAuthenticated, withAuthServerSideProps };

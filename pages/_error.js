@@ -6,8 +6,12 @@ const CustomError = ({ statusCode }) => {
 	return <h1>Oops! Something went wrong...</h1>;
 };
 
-CustomError.getInitialProps = ({ err, res }) => {
-	return { statusCode: res ? res.statusCode : err ? err.statusCode : 404 };
+CustomError.getServerSideProps = ({ err, res }) => {
+	return {
+		props: {
+			statusCode: 404,
+		},
+	};
 };
 
 export default CustomError;

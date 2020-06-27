@@ -2,7 +2,10 @@ import axios from 'axios';
 import parse from 'html-react-parser';
 import Cast from '../../components/Cast';
 import Error from 'next/error';
-import { withAuthorization } from '../../utils/withAuthorization';
+import {
+	withAuthorization,
+	withAuthServerSideProps,
+} from '../../utils/withAuthorization';
 
 const ShowDetails = ({ show = {}, statusCode }) => {
 	const { name, image, summary, _embedded } = show;
@@ -32,21 +35,27 @@ const ShowDetails = ({ show = {}, statusCode }) => {
 	);
 };
 
-ShowDetails.getInitialProps = async ({ query }) => {
+const getComponentServerSideProps = async (props) => {
 	try {
-		const { showId } = query;
+		const { showId } = props.query;
 		const response = await axios.get(
 			`https://api.tvmaze.com/shows/${showId}?embed=cast`
 		);
 
 		return {
-			show: response.data
+			props: {
+				show: response.data,
+			},
 		};
 	} catch (error) {
 		return {
-			statusCode: error.response ? error.response.status : 500
+			statusCode: error.response ? error.response.status : 500,
 		};
 	}
 };
+
+export const getServerSideProps = withAuthServerSideProps(
+	getComponentServerSideProps
+);
 
 export default withAuthorization(ShowDetails);

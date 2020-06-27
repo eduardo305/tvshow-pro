@@ -3,7 +3,7 @@ import cookies from 'nookies';
 
 const Home = () => null;
 
-Home.getInitialProps = context => {
+export const getServerSideProps = (context) => {
 	const { defaultCountry } = cookies.get(context);
 	const country = context.query.country || defaultCountry || 'us';
 

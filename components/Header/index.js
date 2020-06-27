@@ -7,19 +7,19 @@ import { isAuthenticated } from '../../utils/withAuthorization';
 const countries = [
 	{
 		label: 'us',
-		name: 'United States'
+		name: 'United States',
 	},
 	{
 		label: 'br',
-		name: 'Brazil'
-	}
+		name: 'Brazil',
+	},
 ];
 
 const Header = () => {
 	const router = useRouter();
 	const [selectedCountry, setSelectedCountry] = useState(router.query.country);
 
-	const handleChange = e => {
+	const handleChange = (e) => {
 		setSelectedCountry(e.target.value);
 
 		// /country
@@ -27,7 +27,7 @@ const Header = () => {
 	};
 
 	const renderCountries = () => {
-		return countries.map(country => {
+		return countries.map((country) => {
 			return (
 				<option key={country.label} value={country.label}>
 					{country.name}
@@ -44,7 +44,7 @@ const Header = () => {
 		if (selectedCountry) {
 			cookies.set(null, 'defaultCountry', selectedCountry, {
 				maxAge: 30 * 24 * 60 * 60,
-				path: '/'
+				path: '/',
 			});
 		}
 	}, [selectedCountry]);
@@ -56,7 +56,7 @@ const Header = () => {
 			</select>
 
 			{isAuthenticated() && (
-				<Link href="/[country]" as={`/${selectedCountry}`}>
+				<Link href="/[country]" as={`/${cookies.get().defaultCountry}`}>
 					<a onClick={handleSignout}>sign out</a>
 				</Link>
 			)}
